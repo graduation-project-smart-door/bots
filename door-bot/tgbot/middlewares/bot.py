@@ -8,5 +8,5 @@ class BotMiddleware(BaseMiddleware):
         self.bot = bot
 
     async def __call__(self, handler, event, data):
-        data['bot'] = self.bot
+        data["bot"] = self.bot
         return await handler(event, data)

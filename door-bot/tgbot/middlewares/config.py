@@ -10,5 +10,5 @@ class ConfigMiddleware(BaseMiddleware):
         self.config = config
 
     async def __call__(self, handler, event, data):
-        data['config'] = self.config
+        data["config"] = self.config
         return await handler(event, data)

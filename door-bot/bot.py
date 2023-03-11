@@ -30,9 +30,9 @@ async def main():
 
     logging.basicConfig(
         level=logging.INFO,
-        format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s]'
-        '- %(name)s - %(message)s'
-        )
+        format="%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s]"
+        "- %(name)s - %(message)s",
+    )
 
     logger.info("Starting bot")
 
@@ -40,7 +40,7 @@ async def main():
 
     storage = MemoryStorage()
 
-    bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
+    bot = Bot(token=config.tg_bot.token, parse_mode="HTML")
 
     dp = Dispatcher(storage=storage)
 
@@ -56,7 +56,7 @@ async def main():
         await bot.session.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
