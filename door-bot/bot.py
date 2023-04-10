@@ -53,7 +53,7 @@ async def main():
 
     register_all_handlers(dp)
 
-    app.router.add_post("/recognise", send_notification)
+    app.router.add_post("/recognize", send_notification)
 
     SimpleRequestHandler(
         dispatcher=dp,
