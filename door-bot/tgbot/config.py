@@ -11,6 +11,7 @@ class TgBot:
 @dataclass
 class Config:
     tg_bot: TgBot
+    chat_id: int
 
 
 def load_config(path: str = None) -> Config:
@@ -20,5 +21,6 @@ def load_config(path: str = None) -> Config:
     return Config(
         tg_bot=TgBot(
             token=env.str("BOT_TOKEN"),
-        )
+        ),
+        chat_id=env.int('CHAT_ID')
     )
