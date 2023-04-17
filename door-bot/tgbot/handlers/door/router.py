@@ -27,7 +27,7 @@ async def command_start_handler(message: Message, state: FSMContext):
 async def get_video(message: Message, state: FSMContext) -> None:
     await state.update_data(file_id=message.video.file_id)
     
-    await message.answer("Отлично! Теперь введите имя и фамилию через пробел с большой буквы\nПример: Вася Пупкин")
+    await message.answer("Отлично! Теперь ФИО через пробел с большой буквы\nПример: Иванович Василий Пупкин")
     await state.set_state(CreateUser.full_name)
 
 
@@ -41,15 +41,16 @@ async def get_full_name(message: Message, state: FSMContext):
     full_name = message.text
     
     full_name_list = full_name.split(' ')
-    if len(full_name_list) != 2:
+    if len(full_name_list) <= 1 or len(full_name_list) > 3:
         await message.answer("Ты дурачок? Попробуй ещё раз")
 
         return
     
-    first_name, last_name = full_name_list
+    first_name, last_name, middle_name = full_name_list
     
     await state.update_data(first_name=first_name)
     await state.update_data(last_name=last_name)
+    await state.update_data(middle_name=middle_name)
 
     await message.answer("Введите должность:")
     await state.set_state(CreateUser.position)
@@ -63,11 +64,11 @@ async def get_position(message: Message, state: FSMContext, bot: Bot) -> None:
 
     data: dict = await state.get_data()
     
-    url = "http://127.0.0.1:8001/video"
+    url = "http://127.0.0.1:8001/api/users/video"
     
     video = await bot.get_file(file_id)
 
-    create_user(data['first_name'], data['last_name'], position, video, url)
+    create_user(data['first_name'], data['middle_name'], data['last_name'], position, video, url)
     
     await message.answer("Пользователь успешно создан")
     await state.clear()
