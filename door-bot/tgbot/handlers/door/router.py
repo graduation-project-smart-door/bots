@@ -1,9 +1,11 @@
 import logging
+import uuid
 
 from aiogram import F, Router, Bot
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
+import requests
 from tgbot.handlers.door.service import create_user
 
 from tgbot.misc.states import CreateUser
@@ -64,11 +66,26 @@ async def get_position(message: Message, state: FSMContext, bot: Bot) -> None:
 
     data: dict = await state.get_data()
     
-    url = "http://127.0.0.1:8001/api/users/video"
+    create_label_url = "http://127.0.0.1:8001/api/users/video"
+    create_user_url = "http://127.0.0.1:8000/api/v1/users"
     
     video = await bot.get_file(file_id)
 
-    create_user(data['first_name'], data['middle_name'], data['last_name'], position, video, url)
+    uuid_value = uuid.uuid4()
+
+    create_label_response = create_user(data['first_name'], data['last_name'], position, video, create_label_url, uuid_value)
+
+    if create_label_response.status_code == 201:
+        await message.answer("Пользователь успешно создан")
+
+        requests.post(create_user_url, json={
+            "first_name": data['first_name'],
+            "last_name": data['last_name'],
+            "patronymic": data["middle_name"],
+            "person_id": str(uuid_value),
+            "position": position,
+        })
+    else:
+        await message.answer("Что-то пошло не так. Мы не знаем :)")
     
-    await message.answer("Пользователь успешно создан")
     await state.clear()
