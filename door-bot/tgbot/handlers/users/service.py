@@ -18,8 +18,6 @@ def get_time_of_day(time: int) -> str:
     return "night"
 
 
-logger = logging.getLogger(__name__)
-
 MESSAGES = {
     "morninig": "желает всем хорошего утра 🌅",
     "day": "желает всем хорошего дня 🌝",
