@@ -44,7 +44,7 @@ async def main():
     storage = MemoryStorage()
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher(storage=storage)
-    dp["base_url"] = 'https://8af3-176-51-101-127.ngrok-free.app'
+    dp["base_url"] = 'https://0122-2a03-d000-6505-4fcf-f9ea-2809-49a0-8e6.ngrok-free.app'
     dp.startup.register(on_startup)
 
     app = Application()

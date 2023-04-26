@@ -66,7 +66,7 @@ async def get_position(message: Message, state: FSMContext, bot: Bot) -> None:
 
     data: dict = await state.get_data()
     
-    create_label_url = "http://127.0.0.1:8001/api/users/video"
+    create_label_url = "http://127.0.0.1:8081/api/users/video"
     create_user_url = "http://127.0.0.1:8000/api/v1/users"
     
     video = await bot.get_file(file_id)
@@ -76,15 +76,20 @@ async def get_position(message: Message, state: FSMContext, bot: Bot) -> None:
     create_label_response = create_user(data['first_name'], data['last_name'], position, video, create_label_url, uuid_value)
 
     if create_label_response.status_code == 201:
-        await message.answer("Пользователь успешно создан")
 
-        requests.post(create_user_url, json={
+        req = requests.post(create_user_url, json={
             "first_name": data['first_name'],
             "last_name": data['last_name'],
             "patronymic": data["middle_name"],
             "person_id": str(uuid_value),
             "position": position,
         })
+
+        if req.status_code != 201:
+             await message.answer("Что-то пошло не так. Мы не знаем :)")
+        else:
+            await message.answer("Пользователь успешно создан")
+
     else:
         await message.answer("Что-то пошло не так. Мы не знаем :)")
     
