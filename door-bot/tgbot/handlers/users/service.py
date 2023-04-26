@@ -32,7 +32,6 @@ async def send_notification(request: Request) -> Response:
 
     data = await request.json()
     bot: Bot = request.app["bot"]
-    logger.info('data', data)
     
     chat_id: int = request.app['chat_id']
 
