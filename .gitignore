@@ -63,4 +63,4 @@ venv.bak/
 .env
 
 # Files
-access_ids.json
+door-bot/access_ids.json
