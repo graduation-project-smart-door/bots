@@ -17,15 +17,14 @@ class GuardMiddleware(BaseMiddleware):
         self,
         handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
         event: Message,
-        data: Dict[str, Any]
+        data: Dict[str, Any],
     ) -> Any:
-        file = open(os.path.join(WORKDIR, 'access_ids.json'), "r")
-
-        access_ids = json.load(file)
+        with open(os.path.join(WORKDIR, "access_ids.json"), "r") as file:
+            access_ids = json.load(file)
 
         if not event.from_user.id in access_ids:
-          await event.answer('Дебил?')
+            await event.answer("Дебил?")
 
-          return
+            return
 
         return await handler(event, data)

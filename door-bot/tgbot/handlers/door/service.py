@@ -14,7 +14,7 @@ def create_user(
     position: str,
     video: File,
     base_url: str,
-    person_id: uuid.UUID
+    person_id: uuid.UUID,
 ) -> None:
     logger.info(f"send from bot to {base_url}")
 
@@ -27,7 +27,7 @@ def create_user(
             "first_name": first_name,
             "last_name": last_name,
             "position": position,
-            "person_id": str(person_id)
+            "person_id": str(person_id),
         },
         verify=False,
     )

@@ -22,5 +22,5 @@ def load_config(path: str = None) -> Config:
         tg_bot=TgBot(
             token=env.str("BOT_TOKEN"),
         ),
-        chat_id=env.int('CHAT_ID')
+        chat_id=env.int("CHAT_ID"),
     )
