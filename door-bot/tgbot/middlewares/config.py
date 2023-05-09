@@ -1,3 +1,4 @@
+import logging
 from aiogram import BaseMiddleware
 
 from tgbot.config import Config
@@ -11,4 +12,5 @@ class ConfigMiddleware(BaseMiddleware):
 
     async def __call__(self, handler, event, data):
         data["config"] = self.config
+
         return await handler(event, data)
