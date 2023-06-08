@@ -1,13 +1,13 @@
 import logging
-from typing import Awaitable, Callable, Dict
 import uuid
+import requests
+
 
 from aiogram import F, Router, Bot
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, Update
-from pyparsing import Any
-import requests
+from aiogram.types import Message
+from tgbot.config import load_config
 from tgbot.handlers.door.service import create_user
 
 from tgbot.misc.states import CreateUser
@@ -15,6 +15,8 @@ from tgbot.misc.states import CreateUser
 
 door_router = Router()
 logger = logging.getLogger(__name__)
+
+config = load_config(".env")
 
 
 @door_router.message(Command(commands=["start"]))
@@ -67,8 +69,8 @@ async def get_position(message: Message, state: FSMContext, bot: Bot) -> None:
 
     data: dict = await state.get_data()
 
-    create_label_url = "http://127.0.0.1:8081/api/users/video"
-    create_user_url = "http://127.0.0.1:8000/api/v1/users"
+    create_label_url = f"{config.backend_url}/api/users/video"
+    create_user_url = f"{config.frame_maker_url}/api/v1/users"
 
     video = await bot.get_file(file_id)
 

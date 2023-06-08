@@ -1,5 +1,4 @@
 import asyncio
-import datetime
 import logging
 import nest_asyncio
 
@@ -9,7 +8,6 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiohttp.web_app import Application
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from aiogram.types.bot_command import BotCommand
-from apscheduler.schedulers.background import BlockingScheduler
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from tgbot.config import Config, load_config
@@ -49,8 +47,8 @@ async def on_startup(bot: Bot, base_url: str, config: Config):
     scheduler.add_job(
         send_good_morning,
         "cron",
-        hour=12,
-        minute=51,
+        hour=6,
+        minute=30,
         kwargs={"bot": bot, "config": config},
     )
     scheduler.start()
@@ -73,7 +71,7 @@ async def main():
     storage = MemoryStorage()
     bot = Bot(token=config.tg_bot.token, parse_mode="HTML")
     dp = Dispatcher(storage=storage)
-    dp["base_url"] = "https://31c2-92-127-185-170.ngrok-free.app"
+    dp["base_url"] = config.base_url
     dp["config"] = config
     dp.startup.register(on_startup)
 
@@ -92,7 +90,7 @@ async def main():
     setup_application(app, dp, bot=bot)
     register_all_middlewares(dp, config)
 
-    run_app(app, host="127.0.0.1", port=8087)
+    run_app(app, host=config.host, port=config.port)
 
     await bot.delete_webhook(drop_pending_updates=True)
 
